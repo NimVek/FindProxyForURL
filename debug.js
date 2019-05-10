@@ -7,20 +7,20 @@ $(function() {
         });
     });
 
-    $.getJSON('config.json', function(data) {
+    $.get('config.json', function(data) {
         $.each(data, function(key, value) {
             $('#files').append($('<option>', {
                 value: value
             }).text(key));
         });
         $('#files').trigger('change');
-    });
+    },'json');
 
-    $.getJSON('debug.php', {
+    $.post('debug.php', {
         'action': 'myIpAddress'
     }, function(data) {
         $('#client').val(data);
-    });
+    }, 'json');
 
     $.validator.addMethod("ipv4", function(value, element) {
         return this.optional(element) || /^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/i.test(value);

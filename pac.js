@@ -55,6 +55,7 @@ Pac.prototype.dnsResolve = function(host) {
             host: host
         },
         dataType: 'json',
+        method: 'POST',
         async: false,
     }).done(function(data) {
         if ($.type(data) === 'string' && ipv4.test(data)) {

@@ -1,15 +1,14 @@
 <?php
 
-switch ($_REQUEST['action']) {
+switch ($_REQUEST['action'] ?? "invalid") {
     case "myIpAddress":
-        $response = $_SERVER['HTTP_CLIENT_IP'] ? : ($_SERVER['HTTP_X_FORWARDED_FOR'] ? : $_SERVER['REMOTE_ADDR']);
+        $response = $_SERVER['HTTP_CLIENT_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'];
         break;
 
     case "dnsResolve":
-        $host = $_REQUEST['host'];
-        if (isset($host)) {
-            $response = gethostbyname($host);
-            if ($response == $host) {
+        if (isset($_REQUEST['host'])) {
+            $response = gethostbyname($_REQUEST['host']);
+            if ($response == $_REQUEST['host']) {
                 $response = NULL;
             }
         } else {
