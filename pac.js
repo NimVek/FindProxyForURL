@@ -1,6 +1,8 @@
 var Pac = function(ip, datetime) {
     this.ip = ip;
     this.date = datetime;
+
+    this.resolved = new Map();
 }
 
 Pac.prototype.isPlainHostName = function(host) {
@@ -47,22 +49,25 @@ Pac.prototype.isInNet = function(host, network, mask) {
 }
 
 Pac.prototype.dnsResolve = function(host) {
-    result = null;
-    $.ajax({
-        url: 'debug.php',
-        data: {
-            action: 'dnsResolve',
-            host: host
-        },
-        dataType: 'json',
-        method: 'POST',
-        async: false,
-    }).done(function(data) {
-        if ($.type(data) === 'string' && ipv4.test(data)) {
-            result = data;
-        }
-    })
-    return result;
+    if (!this.resolved.has(host)) {
+        result = null;
+        $.ajax({
+            url: 'debug.php',
+            data: {
+                action: 'dnsResolve',
+                host: host
+            },
+            dataType: 'json',
+            method: 'POST',
+            async: false,
+        }).done(function(data) {
+            if ($.type(data) === 'string' && ipv4.test(data)) {
+                result = data;
+            }
+        })
+        this.resolved.set(host,result)
+    }
+    return this.resolved.get(host);
 }
 
 Pac.prototype.myIpAddress = function() {
