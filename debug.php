@@ -3,6 +3,7 @@
 switch ($_REQUEST['action'] ?? "invalid") {
     case "myIpAddress":
         $response = $_SERVER['HTTP_CLIENT_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'];
+        $response = explode(",", $response)[0];
         break;
 
     case "dnsResolve":
